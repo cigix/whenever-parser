@@ -1,6 +1,6 @@
 [package]
 name = "whenever-parser"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Clément Gillard <clement.gillard@epita.fr>"]
 edition = "2018"
 description = "A parser for David Morgan-Mar's Whenever language (http://www.dangermouse.net/esoteric/whenever.html)"
