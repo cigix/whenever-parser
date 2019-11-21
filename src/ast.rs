@@ -76,6 +76,32 @@ pub trait Graph<'a> {
     }
 }
 
+/// Returns the output of `to_dot()` with identifiers normalized for
+/// consistency.
+///
+/// Replaces all occurrences of pointers with their offset from
+/// `root.get_str().as_ptr()`.
+pub fn to_dot_normalized<'a>(root: &dyn Graph<'a>) -> String
+{
+    let dot = root.to_dot();
+    let base = root.get_str().as_ptr() as usize;
+
+    let hexsize = format!("{:x}", base).len(); // TODO: atoi maybe ?
+    let mut split = dot.split("0x");
+
+    let mut normalized = String::from(split.next().unwrap());
+
+    for abnormal in split
+    {
+        let (addr, remainder) = abnormal.split_at(hexsize);
+        let offset = usize::from_str_radix(addr, 16).unwrap() - base;
+        normalized += format!("{:#x}", offset).as_str();
+        normalized += remainder;
+    }
+
+    normalized
+}
+
 // Traits for all alternations, and struct wrappers
 //
 // Alternation structs are not part of the graph, they are just here to wrap
