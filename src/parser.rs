@@ -491,32 +491,6 @@ pub fn eat_line<'a>(input: &'a str)
     Ok((ast::Line::new(lineno, statement, semicolontok), cursor3))
 }
 
-/// Turn the input into an AST.
-///
-/// Returns the root of the AST, an `ast::Line` struct.
-///
-/// # Errors
-///
-/// Will return an description of the error and a slice of the input where the
-/// error happened:
-/// * input could not be tokenized (see `lexer::eat`)
-/// * a token that was not expected in that context was found
-/// * a line could have been built but there are remaining tokens
-pub fn parse<'a>(line: &'a str)
-    -> Result<ast::Line<'a>, (String, &'a str)>
-{
-    let cursor0 = line;
-
-    let (line, cursor1) = eat_line(cursor0)?;
-
-    let (token1, _) = lexer::eat(cursor1)?;
-    match token1.variant
-    {
-        TokenVariant::EOI => Ok(line),
-        _ => Err((String::from("Expected end of input"), token1.tok))
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
